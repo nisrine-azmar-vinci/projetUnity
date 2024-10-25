@@ -4,11 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-<<<<<<< HEAD
-  productGUID: e2406d2237d0a774599c2e64ad376fb2
-=======
-  productGUID: a625fd91ba2dfbe45973de09946331f9
->>>>>>> 62603748171f1cc1d93ebf466e1acc5ceaa337d7
+  productGUID: e75679bf9536f334f8015c3034bae7a7
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -17,11 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-<<<<<<< HEAD
-  productName: Projet_Unity
-=======
   productName: projetUnity
->>>>>>> 62603748171f1cc1d93ebf466e1acc5ceaa337d7
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}
@@ -586,22 +578,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-<<<<<<< HEAD
-  metroPackageName: Projet_Unity
-=======
   metroPackageName: projetUnity
->>>>>>> 62603748171f1cc1d93ebf466e1acc5ceaa337d7
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-<<<<<<< HEAD
-  metroApplicationDescription: Projet_Unity
-=======
   metroApplicationDescription: projetUnity
->>>>>>> 62603748171f1cc1d93ebf466e1acc5ceaa337d7
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
