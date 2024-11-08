@@ -4,13 +4,14 @@ public class BirdMovement : MonoBehaviour
 {
     private Rigidbody rb;
     public float moveSpeed = 5f;
-    public float flySpeed = 8f;
+    public float jumpSpeed = 8f;
     public float moveSmoothTime = 0.1f; // Temps pour adoucir le mouvement
-    public float rotationSpeed = 10f; // Vitesse de rotation pour le corps de l'oiseau
+    public float rotationSpeed = 15f; // Vitesse de rotation pour le corps de l'oiseau
     private Vector3 currentVelocity;
 
     private BirdController birdController;
     public Transform cameraTransform; // Référence à la caméra principale
+    private bool isGrounded; // Indicateur pour savoir si l'oiseau est au sol
 
     void Start()
     {
@@ -26,8 +27,23 @@ public class BirdMovement : MonoBehaviour
 
     void Update()
     {
-        Move();
-        Fly();
+        CheckGrounded();
+        if (isGrounded)
+        {
+            Move();
+            Jump();
+        }
+        if (!isGrounded)
+        {
+            // Met à jour l'animation de vol quand l'oiseau est en l'air
+            birdController.UpdateAnimation(false, true);
+        }
+    }
+
+    private void CheckGrounded()
+    {
+        // Vérifie si l'oiseau est en contact avec le sol en utilisant un raycast
+        isGrounded = isGrounded = Mathf.Abs(rb.velocity.y) < 0.05f;
     }
 
     private void Move()
@@ -49,8 +65,8 @@ public class BirdMovement : MonoBehaviour
         // Créer un vecteur de mouvement relatif à la caméra
         Vector3 targetVelocity = (forward * moveZ + right * moveX);
 
-        // Appliquer la vitesse au Rigidbody avec un mouvement fluide
-        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity * moveSpeed, ref currentVelocity, moveSmoothTime);
+        // Applique la vitesse au Rigidbody de manière fluide
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z), ref currentVelocity, moveSmoothTime);
 
         // Mettre à jour l'animation de marche
         bool isWalking = moveX != 0 || moveZ != 0;
@@ -63,26 +79,22 @@ public class BirdMovement : MonoBehaviour
         }
     }
 
-    private void Fly()
+    private void Jump()
     {
-        if (Input.GetKey(KeyCode.Space))
+        // Vérifie si le joueur appuie sur "Espace" pour sauter
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = new Vector3(rb.velocity.x, flySpeed, rb.velocity.z);
-            birdController.UpdateAnimation(true, true);
+            rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+            isGrounded = false; // Empêche un nouveau saut jusqu'à toucher le sol
         }
     }
 
     private void RotateBird(Vector3 direction)
     {
-        // Ignore l'axe Y pour que l'oiseau reste horizontal
-        direction.y = 0f;
+        direction.y = 0f; // On ignore la composante Y pour garder l'orientation horizontale
+        Vector3 lookPosition = transform.position + direction;
 
-        if (direction != Vector3.zero)
-        {
-            // Créer une rotation cible
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            // Interpoler la rotation pour un mouvement fluide
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
+        // Oriente l'oiseau vers la direction de déplacement
+        transform.LookAt(lookPosition);
     }
 }
