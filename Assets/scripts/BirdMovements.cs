@@ -28,22 +28,14 @@ public class BirdMovement : MonoBehaviour
     void Update()
     {
         CheckGrounded();
-        if (isGrounded)
-        {
-            Move();
-            Jump();
-        }
-        if (!isGrounded)
-        {
-            // Met à jour l'animation de vol quand l'oiseau est en l'air
-            birdController.UpdateAnimation(false, true);
-        }
+        Move();
+        Jump();
+        UpdateAnimation();
     }
 
     private void CheckGrounded()
     {
-        // Vérifie si l'oiseau est en contact avec le sol en utilisant un raycast
-        isGrounded = isGrounded = Mathf.Abs(rb.velocity.y) < 0.05f;
+        isGrounded = Mathf.Abs(rb.velocity.y) < 0.01f;
     }
 
     private void Move()
@@ -70,7 +62,6 @@ public class BirdMovement : MonoBehaviour
 
         // Mettre à jour l'animation de marche
         bool isWalking = moveX != 0 || moveZ != 0;
-        birdController.UpdateAnimation(isWalking);
 
         // Si l'oiseau bouge, oriente-le vers la direction de déplacement
         if (isWalking)
@@ -82,7 +73,7 @@ public class BirdMovement : MonoBehaviour
     private void Jump()
     {
         // Vérifie si le joueur appuie sur "Espace" pour sauter
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
             isGrounded = false; // Empêche un nouveau saut jusqu'à toucher le sol
@@ -96,5 +87,20 @@ public class BirdMovement : MonoBehaviour
 
         // Oriente l'oiseau vers la direction de déplacement
         transform.LookAt(lookPosition);
+    }
+
+    private void UpdateAnimation()
+    {
+        // Si l'oiseau est au sol, on met à jour l'animation de marche
+        if (isGrounded)
+        {
+            bool isWalking = rb.velocity.x != 0 || rb.velocity.z != 0;
+            birdController.UpdateAnimation(isWalking);
+        }
+        else
+        {
+            // Met à jour l'animation en fonction de la vitesse de déplacement dans l'air
+            birdController.UpdateAnimation(false, true);
+        }
     }
 }
