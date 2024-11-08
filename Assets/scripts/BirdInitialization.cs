@@ -19,7 +19,7 @@ public class BirdInitialization : MonoBehaviour
     private IEnumerator StandUpAfterDelay()
     {
         // Attend 2 secondes
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
 
         // Déclenche la transition vers l'animation "idle"
         animator.SetTrigger("StandUp");

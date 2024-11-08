@@ -10,11 +10,18 @@ public class BirdMovement : MonoBehaviour
     private Vector3 currentVelocity;
 
     private BirdController birdController;
+    public Transform cameraTransform; // Référence à la caméra principale
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         birdController = GetComponent<BirdController>();
+
+        // Assigne la caméra principale si elle n'est pas assignée dans l'inspecteur
+        if (cameraTransform == null && Camera.main != null)
+        {
+            cameraTransform = Camera.main.transform;
+        }
     }
 
     void Update()
@@ -29,11 +36,21 @@ public class BirdMovement : MonoBehaviour
         float moveX = Input.GetAxis("Horizontal") * moveSpeed;
         float moveZ = Input.GetAxis("Vertical") * moveSpeed;
 
-        // Créer un vecteur de mouvement
-        Vector3 targetVelocity = new Vector3(moveX, rb.velocity.y, moveZ);
+        // Calculer la direction en fonction de la caméra
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
 
-        // Interpoler la vitesse pour un mouvement plus fluide
-        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, moveSmoothTime);
+        // On ignore la composante verticale pour éviter les inclinaisons
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        // Créer un vecteur de mouvement relatif à la caméra
+        Vector3 targetVelocity = (forward * moveZ + right * moveX);
+
+        // Appliquer la vitesse au Rigidbody avec un mouvement fluide
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity * moveSpeed, ref currentVelocity, moveSmoothTime);
 
         // Mettre à jour l'animation de marche
         bool isWalking = moveX != 0 || moveZ != 0;
