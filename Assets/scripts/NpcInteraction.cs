@@ -2,31 +2,40 @@ using UnityEngine;
 
 public class NpcInteraction : MonoBehaviour
 {
-    private DialogueManager dialogueManager;
+    private MonoBehaviour dialogueManager;  // Utilise une référence générique
 
     void Start()
     {
-        // Trouver le DialogueManager dans la scène
-        dialogueManager = FindObjectOfType<DialogueManager>();
+        dialogueManager = GetComponent<MonoBehaviour>(); // Assigne automatiquement le script de dialogue
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Active le DialogueManager lorsque le joueur entre en collision
-            dialogueManager.dialogueBox.SetActive(true);
-            dialogueManager.dialogueText.text = "Je peux t'offrir un cadeau si tu me trouves 5 coquillages !";
-            dialogueManager.UpdateDialoguePosition(); // Met à jour la position de la boîte de dialogue
+            if (dialogueManager is ShellDialogueManager shellManager)
+            {
+                shellManager.ShowNextDialogueLine();
+            }
+            else if (dialogueManager is GardenerDialogueManager gardenerManager)
+            {
+                gardenerManager.ShowNextDialogueLine();
+            }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            // Désactive la boîte de dialogue lorsque le joueur s'éloigne
-            dialogueManager.dialogueBox.SetActive(false);
+            if (dialogueManager is ShellDialogueManager shellManager)
+            {
+                shellManager.dialogueBox.SetActive(false);
+            }
+            else if (dialogueManager is GardenerDialogueManager gardenerManager)
+            {
+                gardenerManager.dialogueBox.SetActive(false);
+            }
         }
     }
 }

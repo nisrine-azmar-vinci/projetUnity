@@ -6,6 +6,7 @@ TagManager:
   tags:
   - NPC
   - Shell
+  - Flower
   layers:
   - Default
   - TransparentFX

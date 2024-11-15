@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d500461611fb24da7c05bc8ed96fd3, type: 3}
+  m_Name: lezzard
+  m_EditorClassIdentifier: 
+  initialDialogue:
+  - Hello there! Have you seen all the beautiful shells on this beach?
+  - I collect them, and I could use some help. Would you mind gathering a few for
+    me?
+  lackOfPlantsDialogue: []
+  rewardDialogue:
+  - "Great! Here\u2019s a crown as a reward."
+  lackOfShellsDialogue:
+  - "Hmm... you haven\u2019t found enough shells yet. I need at least 5. Could you
+    keep looking?"

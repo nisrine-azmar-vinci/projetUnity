@@ -1,55 +1,75 @@
 using UnityEngine;
+using TMPro;
 
 public class Inventory : MonoBehaviour
 {
-    public int shellCount = 0;  // Nombre de coquillages collectés
-    private UIManager uiManager;
+    public int plantCount = 0;   // Compteur de plantes collectées
+    public int shellCount = 0;   // Compteur de coquillages collectés
+    public TextMeshProUGUI plantCounterText;  // Texte UI pour les plantes
+    public TextMeshProUGUI shellCounterText;  // Texte UI pour les coquillages
 
     void Start()
     {
-        uiManager = FindObjectOfType<UIManager>();
+        UpdateUI();  // Met à jour l'affichage de l'inventaire dès le début du jeu
+    }
+
+    void Update()
+    {
+        // Détecte si le joueur appuie sur 'E' pour ramasser un objet
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("La touche E a été pressée.");
+            // Vérifie si un objet ramassable est à portée
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 3f))
+            {
+                // Si l'objet ramassé est un coquillage ou une fleur, on l'ajoute à l'inventaire
+                Debug.Log("Raycast touche l'objet : " + hit.collider.gameObject.name);
+                CollectItem(hit.collider);
+            }
+        }
+    }
+
+    private void CollectItem(Collider itemCollider)
+    {
+        // Vérifie si l'objet est un coquillage ou une fleur
+        if (itemCollider.CompareTag("Shell"))
+        {
+            AddShells(1);  // Ajoute un coquillage à l'inventaire
+            Destroy(itemCollider.gameObject);  // Détruit l'objet ramassé
+        }
+        else if (itemCollider.CompareTag("Flower"))
+        {
+            AddPlants(1);  // Ajoute une fleur à l'inventaire
+            Destroy(itemCollider.gameObject);  // Détruit l'objet ramassé
+        }
+    }
+
+    // Méthode pour ajouter des plantes et mettre à jour l'UI
+    public void AddPlants(int amount)
+    {
+        plantCount += amount;
         UpdateUI();
     }
 
-    public void AddShell()
+    // Méthode pour ajouter des coquillages et mettre à jour l'UI
+    public void AddShells(int amount)
     {
-        shellCount++;
+        shellCount += amount;
         UpdateUI();
     }
 
-    public bool RemoveShells(int amount)
+    // Méthode pour mettre à jour l'affichage de l'inventaire
+    public void UpdateUI()
     {
-        if (shellCount >= amount)
+        if (plantCounterText != null)
         {
-            shellCount -= amount;
-            UpdateUI();
-            return true;
+            plantCounterText.text = "Plants: " + plantCount;
         }
-        else
+
+        if (shellCounterText != null)
         {
-            Debug.Log("Pas assez de coquillages !");
-            return false;
+            shellCounterText.text = "Shells: " + shellCount;
         }
-    }
-
-    private void UpdateUI()
-    {
-        uiManager.UpdateShellCounter(shellCount);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // Vérifie si le joueur est en contact avec un coquillage
-        if (other.CompareTag("Shell") && Input.GetKeyDown(KeyCode.E))
-        {
-            CollectShell(other.gameObject);  // Ramasse le coquillage si E est pressé
-        }
-    }
-
-    private void CollectShell(GameObject shell)
-    {
-        AddShell();
-        Destroy(shell);  // Supprime le coquillage de la scène
-        Debug.Log("Coquillage ramassé ! Nombre total : " + shellCount);
     }
 }
