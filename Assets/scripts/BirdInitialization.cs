@@ -6,8 +6,7 @@ public class BirdInitialization : MonoBehaviour
     private Animator animator;
     private BirdMovement birdMovement; // Référence au script de mouvement
     private bool isSitting = true; // Indique si l'oiseau est encore assis
-
-    public float sitDuration = 2f; // Durée avant que l'oiseau se lève automatiquement
+    public float sitDuration = 10f; // Durée avant que l'oiseau se lève automatiquement
 
     void Start()
     {
@@ -18,6 +17,7 @@ public class BirdInitialization : MonoBehaviour
         birdMovement.enabled = false;
 
         // Commence l'animation de s'asseoir dès le début
+        animator.SetBool("isSitting", isSitting);
         animator.Play("Sitting");
 
         // Démarre une coroutine pour surveiller les entrées ou le délai
@@ -52,9 +52,7 @@ public class BirdInitialization : MonoBehaviour
     private void StandUp()
     {
         isSitting = false;
-
-        // Déclenche la transition vers l'animation "idle"
-        animator.SetTrigger("StandUp");
+        animator.SetBool("isSitting", isSitting);
 
         // Réactive le mouvement
         birdMovement.enabled = true;
