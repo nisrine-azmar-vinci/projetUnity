@@ -8,4 +8,6 @@ public class PnjInfo : ScriptableObject
     public List<string> lackOfPlantsDialogue;    // Dialogue quand les plantes sont insuffisantes
     public List<string> rewardDialogue;          // Dialogue de récompense
     public List<string> lackOfShellsDialogue;    // (Optionnel) Dialogue quand les coquillages sont insuffisants
+    public List<string> magicPowerGrantedDialogue; // Dialogue quand le pouvoir est accordé
+    public List<string> alreadyHasPowerDialogue;
 }

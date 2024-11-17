@@ -3,7 +3,8 @@ using UnityEngine;
 public class BirdMovement : MonoBehaviour
 {
     private Rigidbody rb;
-    public float moveSpeed = 5f;
+    private PlayerPowerController playerPowerController;
+    //public float moveSpeed = 5f;
     public float jumpSpeed = 8f;
     public float moveSmoothTime = 0.1f; // Temps pour adoucir le mouvement
     public float rotationSpeed = 15f; // Vitesse de rotation pour le corps de l'oiseau
@@ -17,6 +18,8 @@ public class BirdMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         birdController = GetComponent<BirdController>();
+
+        playerPowerController = FindObjectOfType<PlayerPowerController>();
 
         // Assigne la caméra principale si elle n'est pas assignée dans l'inspecteur
         if (cameraTransform == null && Camera.main != null)
@@ -41,8 +44,10 @@ public class BirdMovement : MonoBehaviour
     private void Move()
     {
         // Récupérer les entrées de déplacement
-        float moveX = Input.GetAxis("Horizontal") * moveSpeed;
-        float moveZ = Input.GetAxis("Vertical") * moveSpeed;
+        float moveX = Input.GetAxis("Horizontal") ;
+        float moveZ = Input.GetAxis("Vertical");
+
+        float moveSpeed = playerPowerController.GetCurrentSpeed();
 
         // Calculer la direction en fonction de la caméra
         Vector3 forward = cameraTransform.forward;
@@ -55,7 +60,7 @@ public class BirdMovement : MonoBehaviour
         right.Normalize();
 
         // Créer un vecteur de mouvement relatif à la caméra
-        Vector3 targetVelocity = (forward * moveZ + right * moveX);
+        Vector3 targetVelocity = (forward * moveZ + right * moveX) * moveSpeed;
 
         // Applique la vitesse au Rigidbody de manière fluide
         rb.velocity = Vector3.SmoothDamp(rb.velocity, new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z), ref currentVelocity, moveSmoothTime);
@@ -66,7 +71,14 @@ public class BirdMovement : MonoBehaviour
         // Si l'oiseau bouge, oriente-le vers la direction de déplacement
         if (isWalking)
         {
-            RotateBird(targetVelocity);
+            RotateBird(targetVelocity, moveSpeed);
+        }
+        else
+        {
+            // Lorsque l'oiseau ne se déplace pas, on peut l'empêcher de tourner
+            // Eviter que l'oiseau tourne sur lui-même quand il est immobile
+            // L'oiseau ne fait rien en termes de rotation ici
+            rb.angularVelocity = Vector3.zero;
         }
     }
 
@@ -80,14 +92,25 @@ public class BirdMovement : MonoBehaviour
         }
     }
 
-    private void RotateBird(Vector3 direction)
-    {
-        direction.y = 0f; // On ignore la composante Y pour garder l'orientation horizontale
-        Vector3 lookPosition = transform.position + direction;
 
-        // Oriente l'oiseau vers la direction de déplacement
-        transform.LookAt(lookPosition);
+
+    private void RotateBird(Vector3 direction, float moveSpeed)
+    {
+        direction.y = 0f; // Ignorer la composante Y pour éviter une rotation verticale
+
+        // Si la direction est significative et que la vitesse est suffisamment grande, alors appliquer une rotation
+        if (direction.magnitude > 0.1f)
+        {
+            // Calculer la rotation de l'oiseau
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            // Appliquer une rotation en douceur avec un certain facteur de vitesse de rotation
+            // Limiter la vitesse de rotation en fonction de la vitesse de déplacement
+            float rotationFactor = Mathf.Clamp(rotationSpeed * (moveSpeed / 5f), 1f, 10f); // Le facteur de rotation varie selon la vitesse
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationFactor * Time.deltaTime);
+        }
     }
+
 
     private void UpdateAnimation()
     {
