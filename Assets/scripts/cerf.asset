@@ -17,7 +17,7 @@ MonoBehaviour:
     for my research."
   - If you can bring me enough flowers, I might have a special gift for you in return.
   lackOfPlantsDialogue:
-  - Keep looking! Plants are scattered all around this forest.
+  - Keep looking! Plants are scattered all around this field.
   - "It seems you don\u2019t have enough flowers yet. Please bring me at least 3."
   rewardDialogue:
   - Ah, you've gathered enough flowers. Thank you very much.

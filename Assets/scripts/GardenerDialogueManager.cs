@@ -108,7 +108,7 @@ public class GardenerDialogueManager : MonoBehaviour
     {
         if (companionPrefab != null && companionInstance == null)
         {
-            // Instancie le compagnon
+            // Instancier le compagnon si ce n'est pas déjà fait
             companionInstance = Instantiate(companionPrefab, playerInventory.transform.position + Vector3.right * 2, Quaternion.identity);
 
             // Positionne le compagnon sur le NavMesh
@@ -132,7 +132,20 @@ public class GardenerDialogueManager : MonoBehaviour
                 companionController.playerTransform = playerInventory.transform;
             }
         }
+        else if (companionInstance != null)
+        {
+            // Si le compagnon existe déjà, on l'active
+            companionInstance.SetActive(true);
+
+            // Configure le suivi du joueur
+            CompanionController companionController = companionInstance.GetComponent<CompanionController>();
+            if (companionController != null)
+            {
+                companionController.playerTransform = playerInventory.transform;
+            }
+        }
     }
+
 
 
     private void ShowBaseDialogue()
