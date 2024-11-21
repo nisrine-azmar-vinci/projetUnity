@@ -34,6 +34,7 @@ public class BirdInitialization : MonoBehaviour
             if (Input.anyKeyDown)
             {
                 StandUp();
+                StopCoroutine(HandleSittingState());
                 yield break;
             }
 
@@ -42,6 +43,7 @@ public class BirdInitialization : MonoBehaviour
             if (elapsedTime >= sitDuration)
             {
                 StandUp();
+                StopCoroutine(HandleSittingState());
                 yield break;
             }
 

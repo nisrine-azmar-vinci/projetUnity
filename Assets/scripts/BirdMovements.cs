@@ -38,7 +38,7 @@ public class BirdMovement : MonoBehaviour
 
     private void CheckGrounded()
     {
-        isGrounded = Mathf.Abs(rb.velocity.y) < 0.01f;
+        isGrounded = Mathf.Abs(rb.velocity.y) < 0.1f;
     }
 
     private void Move()
@@ -73,11 +73,7 @@ public class BirdMovement : MonoBehaviour
         {
             RotateBird(targetVelocity, moveSpeed);
         }
-        else
-        {
-            // Lorsque l'oiseau ne se déplace pas, on peut l'empêcher de tourner
-            // Eviter que l'oiseau tourne sur lui-même quand il est immobile
-            // L'oiseau ne fait rien en termes de rotation ici
+        else {
             rb.angularVelocity = Vector3.zero;
         }
     }
@@ -101,13 +97,8 @@ public class BirdMovement : MonoBehaviour
         // Si la direction est significative et que la vitesse est suffisamment grande, alors appliquer une rotation
         if (direction.magnitude > 0.1f)
         {
-            // Calculer la rotation de l'oiseau
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-            // Appliquer une rotation en douceur avec un certain facteur de vitesse de rotation
-            // Limiter la vitesse de rotation en fonction de la vitesse de déplacement
-            float rotationFactor = Mathf.Clamp(rotationSpeed * (moveSpeed / 5f), 1f, 10f); // Le facteur de rotation varie selon la vitesse
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationFactor * Time.deltaTime);
+            Vector3 lookPosition = transform.position + direction;
+            transform.LookAt(lookPosition);
         }
     }
 
@@ -117,8 +108,10 @@ public class BirdMovement : MonoBehaviour
         // Si l'oiseau est au sol, on met à jour l'animation de marche
         if (isGrounded)
         {
-            bool isWalking = rb.velocity.x != 0 || rb.velocity.z != 0;
-            birdController.UpdateAnimation(isWalking);
+            float moveX = Input.GetAxis("Horizontal");
+            float moveZ = Input.GetAxis("Vertical");
+            bool isWalking = moveX != 0 || moveZ != 0;
+            birdController.UpdateAnimation(isWalking, false);
         }
         else
         {

@@ -9,7 +9,7 @@ public class BirdController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void UpdateAnimation(bool isWalking, bool isFlying = false)
+    public void UpdateAnimation(bool isWalking = false, bool isFlying = false)
     {
         if (isFlying)
         {
