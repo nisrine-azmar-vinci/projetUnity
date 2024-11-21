@@ -52,6 +52,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4151665788671687930, guid: 78fbb61ea7723b94bb212d7524241304, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.00004
+      objectReference: {fileID: 0}
+    - target: {fileID: -4151665788671687930, guid: 78fbb61ea7723b94bb212d7524241304, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00064
+      objectReference: {fileID: 0}
+    - target: {fileID: -4151665788671687930, guid: 78fbb61ea7723b94bb212d7524241304, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.00449
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 78fbb61ea7723b94bb212d7524241304, type: 3}
       propertyPath: m_Name
       value: gold_chest_coin_04
@@ -93,3 +105,4 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
