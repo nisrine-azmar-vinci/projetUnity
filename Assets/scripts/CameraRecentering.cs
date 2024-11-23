@@ -13,7 +13,7 @@ public class CameraRecentering : MonoBehaviour
     void Update()
     {
         // Vérifie si l'utilisateur utilise l'axe Y de la caméra
-        if (Mathf.Abs(Input.GetAxis("Mouse Y")) > 0.01f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.01f)
+        if (Mathf.Abs(Input.GetAxis("Mouse Y")) > 0.01f)
         {
             // Remet à zéro le temps d'inactivité si la caméra est en mouvement
             idleTime = 0f;
