@@ -14,7 +14,7 @@ public class PortalController : MonoBehaviour
 
     void Update()
     {
-        if (birdController.missionsFinished >= 3)
+        if (birdController.missionsFinished >= 3 && !bigPortal.isPlaying && !smallPortal.isPlaying)
         {
             bigPortal.Play();
             smallPortal.Play();

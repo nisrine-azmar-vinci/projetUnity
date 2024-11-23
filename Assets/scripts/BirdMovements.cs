@@ -4,7 +4,7 @@ public class BirdMovement : MonoBehaviour
 {
     private Rigidbody rb;
     private PlayerPowerController playerPowerController;
-    public float jumpSpeed = 8f;
+    public float jumpSpeed = 7f;
     public float moveSmoothTime = 0.1f; // Temps pour adoucir le mouvement
     public float rotationSpeed = 15f; // Vitesse de rotation pour le corps de l'oiseau
     private Vector3 currentVelocity;
@@ -14,8 +14,8 @@ public class BirdMovement : MonoBehaviour
     private bool isGrounded; // Indicateur pour savoir si l'oiseau est au sol
 
     // Paramètres pour la gestion des pentes et des escaliers
-    public float stepHeight = 0.2f; // Hauteur maximale des marches
-    public float stepSmooth = 0.05f; // Vitesse de montée des marches
+    public float stepHeight = 0.022f; // Hauteur maximale des marches
+    public float stepSmooth = 0.022f; // Vitesse de montée des marches
 
     void Start()
     {

@@ -6,7 +6,7 @@ public class BirdInitialization : MonoBehaviour
     private Animator animator;
     private BirdMovement birdMovement; // Référence au script de mouvement
     private bool isSitting = true; // Indique si l'oiseau est encore assis
-    public float sitDuration = 10f; // Durée avant que l'oiseau se lève automatiquement
+    public float sitDuration = 20f; // Durée avant que l'oiseau se lève automatiquement
 
     void Start()
     {
