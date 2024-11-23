@@ -13,6 +13,7 @@ public class ShellDialogueManager : MonoBehaviour
     private bool isRewardDialogue = false;
     private bool isBaseDialogueCompleted = false;
     private bool isPlayerInRange = false;
+    public BirdController birdController;
 
     void Start()
     {
@@ -120,6 +121,8 @@ public class ShellDialogueManager : MonoBehaviour
         dialogueText.text = pnjInfo.rewardDialogue[dialogueIndex];
         dialogueBox.SetActive(true);
         dialogueIndex++;
+
+        birdController.missionsFinished += 1;
 
         // Réinitialise le nombre de coquillages pour éviter que la condition soit relancée
         playerInventory.shellCount = 0;

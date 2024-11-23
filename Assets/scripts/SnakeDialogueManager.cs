@@ -13,6 +13,8 @@ public class SnakeDialogueManager : MonoBehaviour
     private bool isPlayerInRange = false;
     private int dialogueIndex = 0;
 
+    public BirdController birdController;
+
     void Start()
     {
         dialogueBox.SetActive(false);
@@ -71,6 +73,7 @@ public class SnakeDialogueManager : MonoBehaviour
         {
             playerPowerController.GrantSpeedBoost(grantedPower); // Accorder le boost de vitesse au joueur
             Debug.Log($"Speed boost granted: {grantedPower.powerName}");
+            birdController.missionsFinished += 1;
         }
     }
 

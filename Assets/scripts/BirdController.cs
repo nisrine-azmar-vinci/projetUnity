@@ -3,6 +3,7 @@ using UnityEngine;
 public class BirdController : MonoBehaviour
 {
     private Animator animator;
+    public int missionsFinished = 0;
 
     void Start()
     {

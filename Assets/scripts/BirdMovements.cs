@@ -4,7 +4,6 @@ public class BirdMovement : MonoBehaviour
 {
     private Rigidbody rb;
     private PlayerPowerController playerPowerController;
-    //public float moveSpeed = 5f;
     public float jumpSpeed = 8f;
     public float moveSmoothTime = 0.1f; // Temps pour adoucir le mouvement
     public float rotationSpeed = 15f; // Vitesse de rotation pour le corps de l'oiseau
@@ -14,11 +13,14 @@ public class BirdMovement : MonoBehaviour
     public Transform cameraTransform; // Référence à la caméra principale
     private bool isGrounded; // Indicateur pour savoir si l'oiseau est au sol
 
+    // Paramètres pour la gestion des pentes et des escaliers
+    public float stepHeight = 0.2f; // Hauteur maximale des marches
+    public float stepSmooth = 0.05f; // Vitesse de montée des marches
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         birdController = GetComponent<BirdController>();
-
         playerPowerController = FindObjectOfType<PlayerPowerController>();
 
         // Assigne la caméra principale si elle n'est pas assignée dans l'inspecteur
@@ -32,6 +34,7 @@ public class BirdMovement : MonoBehaviour
     {
         CheckGrounded();
         Move();
+        StepClimb();
         Jump();
         UpdateAnimation();
     }
@@ -44,7 +47,7 @@ public class BirdMovement : MonoBehaviour
     private void Move()
     {
         // Récupérer les entrées de déplacement
-        float moveX = Input.GetAxis("Horizontal") ;
+        float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
         float moveSpeed = playerPowerController.GetCurrentSpeed();
@@ -65,16 +68,32 @@ public class BirdMovement : MonoBehaviour
         // Applique la vitesse au Rigidbody de manière fluide
         rb.velocity = Vector3.SmoothDamp(rb.velocity, new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z), ref currentVelocity, moveSmoothTime);
 
-        // Mettre à jour l'animation de marche
-        bool isWalking = moveX != 0 || moveZ != 0;
-
         // Si l'oiseau bouge, oriente-le vers la direction de déplacement
-        if (isWalking)
+        if (moveX != 0 || moveZ != 0)
         {
             RotateBird(targetVelocity, moveSpeed);
         }
-        else {
+        else
+        {
             rb.angularVelocity = Vector3.zero;
+        }
+    }
+
+    private void StepClimb()
+    {
+        // Rayon pour détecter les obstacles directement devant
+        if (Physics.Raycast(transform.position + Vector3.up * 0.1f, transform.forward, out RaycastHit hit, 0.5f))
+        {
+            // Si un obstacle est détecté, vérifie s'il s'agit d'une marche
+            if (hit.normal.y < 0.1f && hit.distance < 0.5f)
+            {
+                // Rayon pour vérifier au-dessus de l'obstacle
+                if (Physics.Raycast(transform.position + Vector3.up * stepHeight, transform.forward, out RaycastHit stepHit, 0.5f))
+                {
+                    // Si le rayon détecte un espace libre, monte l'oiseau
+                    rb.position += Vector3.up * stepSmooth;
+                }
+            }
         }
     }
 
@@ -88,8 +107,6 @@ public class BirdMovement : MonoBehaviour
         }
     }
 
-
-
     private void RotateBird(Vector3 direction, float moveSpeed)
     {
         direction.y = 0f; // Ignorer la composante Y pour éviter une rotation verticale
@@ -101,7 +118,6 @@ public class BirdMovement : MonoBehaviour
             transform.LookAt(lookPosition);
         }
     }
-
 
     private void UpdateAnimation()
     {

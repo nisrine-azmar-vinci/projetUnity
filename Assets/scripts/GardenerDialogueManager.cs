@@ -15,6 +15,8 @@ public class GardenerDialogueManager : MonoBehaviour
     private bool isBaseDialogueCompleted = false;
     private bool isPlayerInRange = false;
 
+    public BirdController birdController;
+
     public GameObject companionPrefab; // Le prefab du compagnon
     private GameObject companionInstance;
 
@@ -41,7 +43,7 @@ public class GardenerDialogueManager : MonoBehaviour
             ShowNextDialogueLine();
         }
 
-       
+
     }
 
     public void ShowNextDialogueLine()
@@ -178,6 +180,8 @@ public class GardenerDialogueManager : MonoBehaviour
         dialogueBox.SetActive(true);
         dialogueIndex++;
         Debug.Log("Reward dialogue started.");
+
+        birdController.missionsFinished += 1;
 
         playerInventory.plantCount = 0;  // Remet le compteur de plantes à zéro pour éviter que la condition soit relancée
         playerInventory.UpdateUI();

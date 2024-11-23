@@ -5,25 +5,29 @@ public class PortalVisibility : MonoBehaviour
     public ParticleSystem portalParticles;  // Référence au système de particules du portail
     public Transform player;               // Référence au joueur ou à la caméra
     public float fadeDistance = 20f;       // Distance à laquelle les particules commencent à s'arrêter
+    public BirdController birdController;
 
     void Update()
     {
-        // Calculer la distance entre le joueur et le portail
-        float distance = Vector3.Distance(player.position, portalParticles.transform.position);
+        if (birdController.missionsFinished >= 3)
+        {
+            // Calculer la distance entre le joueur et le portail
+            float distance = Vector3.Distance(player.position, portalParticles.transform.position);
 
-        // Si le joueur est à une distance plus courte que fadeDistance, lancer les particules
-        if (distance > fadeDistance)
-        {
-            if (!portalParticles.isPlaying)  // Si les particules ne sont pas déjà activées
+            // Si le joueur est à une distance plus courte que fadeDistance, lancer les particules
+            if (distance > fadeDistance)
             {
-                portalParticles.Play();  // Démarre les particules
+                if (!portalParticles.isPlaying)  // Si les particules ne sont pas déjà activées
+                {
+                    portalParticles.Play();  // Démarre les particules
+                }
             }
-        }
-        else
-        {
-            if (portalParticles.isPlaying)  // Si les particules sont déjà en train de jouer
+            else
             {
-                portalParticles.Stop();  // Arrête les particules
+                if (portalParticles.isPlaying)  // Si les particules sont déjà en train de jouer
+                {
+                    portalParticles.Stop();  // Arrête les particules
+                }
             }
         }
     }

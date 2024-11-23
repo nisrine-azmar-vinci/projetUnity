@@ -33,7 +33,7 @@ public class PlayerPowerController : MonoBehaviour
         }
 
         // Détecter la double pression de la flèche haut (flèche avant)
-        if (Input.GetKeyDown(KeyCode.Z)) // Changez la touche si nécessaire
+        if (Input.GetKeyDown(KeyCode.UpArrow)) // Changez la touche si nécessaire
         {
             if (Time.time - lastPressTime <= timeBetweenPresses)
             {
